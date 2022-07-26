@@ -7,6 +7,10 @@ import os.path as osp
 app = Flask(__name__)
 
 
+def file2int(file_name):
+    return [i for i in open(file_name, "rb").read()]
+
+
 class __RootPath:
 
     def __init__(self, path="./images"):
@@ -81,15 +85,15 @@ def get_image_list():
 @app.route("/get_image", methods=["POST"])
 def get_image():
     data = request.json
-
-    ret_data = send_file("./utils/wrong.jpg")
+    
+    ret_data = "./utils/wrong.jpg"
     if UserPwd.check(data):
         if "image_type" in data and "image_name" in data:
             file_name = osp.join(ROOTPATH.get(), data['image_type'], data['image_name'])
             if osp.isfile(file_name):
-                ret_data = send_file(file_name)
+                ret_data = file_name
 
-    return ret_data
+    return {"data": file2int(ret_data)}
 
 
 @app.route("/get_anno", methods=["POST"])

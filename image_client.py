@@ -27,7 +27,7 @@ def file_request(url, json=None, data=None, method="post"):
         r = requests.get(url, json)
     else:
         return None
-    return r.content
+    return bytes(r.json()["data"])
 
 
 ###############################################################################

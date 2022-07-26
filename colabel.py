@@ -1,5 +1,6 @@
 from image_client import *
 from local_server import back_process
+from multiprocessing import freeze_support
 from image import Image
 
 from ui.main_window import Ui_MainWindow as FMainWindow
@@ -157,6 +158,10 @@ class MainWindow(QtWidgets.QMainWindow, FMainWindow):
                 self.localService.setChecked(False)
                 return
             if self.local_server is None:
+                try:
+                    freeze_support()
+                except:
+                    pass
                 self.local_server = back_process(
                     user=self.local_user.text(),
                     password=self.local_pwd.text(),
@@ -555,9 +560,15 @@ class MainWindow(QtWidgets.QMainWindow, FMainWindow):
 if __name__ == '__main__':
 
     def main():
+        try:
+            freeze_support()
+        except:
+            pass
         app = QtWidgets.QApplication(sys.argv)
         w = MainWindow()
         w.show()
         sys.exit(app.exec_())
-
-    main()
+    try:
+        main()
+    except:
+        pass

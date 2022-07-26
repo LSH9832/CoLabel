@@ -2,16 +2,18 @@ import image_server
 from multiprocessing import Process, freeze_support
 
 
-freeze_support()
-
-
 def back_run(user="admin", password="admin", root_path="./images", **kwargs):
-    image_server.ROOTPATH.set(root_path)
-    image_server.UserPwd.set(user, password)
-    image_server.app.run(**kwargs)
+    while True:
+        try:
+            image_server.ROOTPATH.set(root_path)
+            image_server.UserPwd.set(user, password)
+            image_server.app.run(**kwargs)
+        except:
+            pass
 
 
 def back_process(user="admin", password="admin", host="0.0.0.0", port=12345, root_path="./images", **kwargs):
+    freeze_support()
     data = {
         "host": host,
         "port": port

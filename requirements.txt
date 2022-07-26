@@ -1,0 +1,8 @@
+numpy
+pyyaml
+requests
+pillow
+flask
+lxml
+opencv_python
+pyqt5

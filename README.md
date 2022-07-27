@@ -13,7 +13,7 @@ python colabel.py
 ################################################
 # provide service only
 ################################################
-pip install flask requests lxml
+pip install flask lxml
 # params                   host   |  port  |    user    | password | dataset root path 
 # default                0.0.0.0  | 12345  |   admin    |   admin  |    ./images
 python image_server.py -ip 0.0.0.0 -p 12345 -u username -k password -r ./images
@@ -31,6 +31,6 @@ python3 colabel.py
 ################################################
 # provide service only
 ################################################
-pip3 install flask requests lxml
+pip3 install flask lxml
 python3 image_server.py -ip 0.0.0.0 -p 12345 -u username -k password -r ./images
 ```

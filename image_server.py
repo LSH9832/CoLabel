@@ -2,8 +2,7 @@ from flask import *
 from glob import glob
 from lxml import etree
 import os.path as osp
-import cv2
-import numpy as np
+
 
 app = Flask(__name__)
 
@@ -13,8 +12,7 @@ DEFAULT_ROOT_PATH = "./images"
 
 def file2int(file_name):
     if not osp.isfile(file_name):
-        cv2.imwrite("temp.jpg", np.array([[[0,0, 255]]]).astype("uint8"))
-        file_name = "temp.jpg"
+        return None
     return [i for i in open(file_name, "rb").read()]
 
 
@@ -178,5 +176,21 @@ def change_xml():
 
 
 if __name__ == '__main__':
-    ROOTPATH.set("./images")
-    app.run("0.0.0.0", 12345, False)
+    import argparse
+
+
+    def create_argparse():
+        parse = argparse.ArgumentParser()
+        parse.add_argument("-ip", "--host", default="0.0.0.0", type=str, help="host ip")
+        parse.add_argument("-p", "--port", default=12345, type=int, help="server port")
+        parse.add_argument("-u", "--user", default="admin", type=str, help="login username")
+        parse.add_argument("-k", "--key", default="admin", type=str, help="login password(secret key)")
+        parse.add_argument("-r", "--root-path", default=DEFAULT_ROOT_PATH, type=str, help="dataset root dir")
+        return parse.parse_args()
+
+
+    args = create_argparse()
+
+    ROOTPATH.set(args.root_path)
+    UserPwd.set(args.user, args.key)
+    app.run(args.host, min(65535, max(1, args.port)), False)

@@ -27,7 +27,13 @@ def file_request(url, json=None, data=None, method="post"):
         r = requests.get(url, json)
     else:
         return None
-    return bytes(r.json()["data"])
+    data = r.json()["data"]
+    if data is not None:
+        try:
+            return bytes(data)
+        except:
+            pass
+    return None
 
 
 ###############################################################################
@@ -63,9 +69,15 @@ def get_image_list(ip="127.0.0.1", port=12345, image_type="default", user="admin
 def get_image(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jpg", user="admin", pwd="admin", **_):
     url = f"http://{ip}:{int(port)}/get_image"
     json = {"user": user, "password": pwd, "image_type": image_type, "image_name": image_name}
-    file_data = BytesIO(file_request(url, json, method="post"))
 
-    return np.asarray(imgopen(file_data))
+    data = file_request(url, json, method="post")
+    if data is not None:
+        try:
+            file_data = BytesIO(data)
+            return np.asarray(imgopen(file_data))
+        except:
+            pass
+    return np.array([[[127, 127, 127]]])
 
 
 def get_anno(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jpg", user="admin", pwd="admin", **_):

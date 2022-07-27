@@ -1,15 +1,19 @@
 import image_server
 from multiprocessing import Process, freeze_support
+import os
 
 
 def back_run(user="admin", password="admin", root_path="./images", **kwargs):
+    if root_path == image_server.DEFAULT_ROOT_PATH:
+        if not os.path.isdir(root_path):
+            os.makedirs(root_path, exist_ok=True)
     while True:
         try:
             image_server.ROOTPATH.set(root_path)
             image_server.UserPwd.set(user, password)
             image_server.app.run(**kwargs)
-        except:
-            pass
+        except Exception as e:
+            os.system(f"echo {e} >> server_error_log.txt")
 
 
 def back_process(user="admin", password="admin", host="0.0.0.0", port=12345, root_path="./images", **kwargs):

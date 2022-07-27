@@ -570,5 +570,5 @@ if __name__ == '__main__':
         sys.exit(app.exec_())
     try:
         main()
-    except:
-        pass
+    except Exception as e:
+        os.system(f"echo {e} >> error_log.txt")

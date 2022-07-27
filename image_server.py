@@ -2,12 +2,19 @@ from flask import *
 from glob import glob
 from lxml import etree
 import os.path as osp
-
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 
 
+DEFAULT_ROOT_PATH = "./images"
+
+
 def file2int(file_name):
+    if not osp.isfile(file_name):
+        cv2.imwrite("temp.jpg", np.array([[[0,0, 255]]]).astype("uint8"))
+        file_name = "temp.jpg"
     return [i for i in open(file_name, "rb").read()]
 
 
@@ -77,7 +84,8 @@ def get_image_list():
     if UserPwd.check(data):
         if "image_type" in data:
             if osp.isdir(osp.join(ROOTPATH.get(), data['image_type'])):
-                all_images = glob(osp.join(ROOTPATH.get(), data['image_type'], "*.jpg"))
+                for file_type in ["jpg", "png", "bmp", "gif", "webp", "jpeg"]:
+                    all_images += glob(osp.join(ROOTPATH.get(), data['image_type'], f"*.{file_type}"))
                 all_images = sorted([image_name.replace("\\", "/").split("/")[-1] for image_name in all_images])
     return {"data": all_images}
 

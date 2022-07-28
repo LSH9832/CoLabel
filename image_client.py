@@ -118,7 +118,7 @@ def change_anno(ip="127.0.0.1", port=12345, image_type="default", image_name="1.
 
 if __name__ == '__main__':
 
-    test_type = "机枪"
+    test_type = "my_type"
     print(test_connect(port=13579))
     # for image_name in get_image_list(image_type=test_type)[:1]:
     #     # image = get_image(image_type=test_type, image_name=image_name)

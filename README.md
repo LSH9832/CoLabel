@@ -1,4 +1,7 @@
 # CoLabel  Version0.1.0
+
+You can download [release file](https://github.com/LSH9832/CoLabel/releases/tag/v0.1.0) for directly use.
+
 ## Quick Start
 
 - for Windows

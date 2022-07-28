@@ -2,6 +2,15 @@ import requests
 import numpy as np
 from io import BytesIO
 from PIL.Image import open as imgopen
+import socket
+
+
+def getIP(domain: str):
+    try:
+        myaddr = socket.getaddrinfo(domain, 'http')
+        return myaddr[0][4][0]
+    except:
+        return domain
 
 
 def base_request(url, json=None, data=None, method="post"):
@@ -38,6 +47,7 @@ def file_request(url, json=None, data=None, method="post"):
 
 ###############################################################################
 def test_connect(ip="127.0.0.1", port=12345, user="admin", pwd="admin", **_):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/test_connect"
     json = {"user": user, "password": pwd}
     e = "发生未知错误！"
@@ -55,18 +65,21 @@ def test_connect(ip="127.0.0.1", port=12345, user="admin", pwd="admin", **_):
 
 
 def get_type_list(ip="127.0.0.1", port=12345, user="admin", pwd="admin", **_):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/get_image_type"
     json = {"user": user, "password": pwd}
     return sorted(base_request(url, json, method="post"))
 
 
 def get_image_list(ip="127.0.0.1", port=12345, image_type="default", user="admin", pwd="admin", **_):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/get_image_list"
     json = {"user": user, "password": pwd, "image_type": image_type}
     return base_request(url, json, method="post")
 
 
 def get_image(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jpg", user="admin", pwd="admin", **_):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/get_image"
     json = {"user": user, "password": pwd, "image_type": image_type, "image_name": image_name}
 
@@ -81,12 +94,14 @@ def get_image(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jp
 
 
 def get_anno(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jpg", user="admin", pwd="admin", **_):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/get_anno"
     json = {"user": user, "password": pwd, "image_type": image_type, "image_name": image_name}
     return base_request(url, json, method="post")
 
 
 def change_anno(ip="127.0.0.1", port=12345, image_type="default", image_name="1.jpg", items=None, user="admin", pwd="admin", **kwargs):
+    ip = getIP(ip)
     url = f"http://{ip}:{int(port)}/change_xml"
     json = {
         "user": user,

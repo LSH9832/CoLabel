@@ -5,6 +5,7 @@ from image import Image
 
 from ui.main_window import Ui_MainWindow as FMainWindow
 from ui.choose_class import Ui_ChooseClass as ChooseClass
+from labelConverter import LabelConverter
 
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import *
@@ -67,6 +68,7 @@ class MainWindow(QtWidgets.QMainWindow, FMainWindow):
 
     current_image = Image()
     local_server = None
+    label_converter = None
 
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
@@ -206,6 +208,8 @@ class MainWindow(QtWidgets.QMainWindow, FMainWindow):
         self._image_list = []
         self._user = ""
         self._pwd = ""
+        self.label_converter = LabelConverter(parent=self)
+        self.label_converter.setWindowTitle(f"Label Converter - from {Title}")
         self._load_data()
         self._auto_save_data()
 
@@ -256,12 +260,18 @@ class MainWindow(QtWidgets.QMainWindow, FMainWindow):
             self.current_image.draw_bbox(self.image, self.anno_list.currentIndex().row())
             # self.anno_list.setCurrentIndex()
 
+        def startLabelConverter():
+            self.setVisible(False)
+            self.label_converter.show()
+
+
         self.login_out.clicked.connect(login_out_ClickFun)
         self.dir_list.doubleClicked.connect(getImageList)
         self.image_list.currentItemChanged.connect(showImage)
         self.anno_list.clicked.connect(repaintAnno)
 
         self.localService.clicked.connect(self._check_local_service)
+        self.labelConverter.clicked.connect(startLabelConverter)
 
         def mousePress(a0: QtGui.QMouseEvent):
             self.isPressed = True
